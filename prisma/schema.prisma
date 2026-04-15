@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String?
+  email     String   @unique
+  password  String
+  token     String?  @db.VarChar(300)
+  createdAt DateTime @default(now())
+
+  accounts     Account[]
+  categories   Category[]
+  transactions Transaction[]
+}
+
+model Account {
+  id        String   @id @default(uuid())
+  name      String
+  balance   Decimal  @default(0)
+  userId    String
+  createdAt DateTime @default(now())
+
+  user         User          @relation(fields: [userId], references: [id])
+  transactions Transaction[]
+}
+
+model Category {
+  id        String       @id @default(uuid())
+  name      String
+  type      CategoryType
+  userId    String
+  createdAt DateTime     @default(now())
+
+  user         User          @relation(fields: [userId], references: [id])
+  transactions Transaction[]
+}
+
+model Transaction {
+  id          String          @id @default(uuid())
+  amount      Decimal
+  type        TransactionType
+  description String?
+  date        DateTime        @default(now())
+
+  userId     String
+  accountId  String
+  categoryId String
+
+  createdAt DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id])
+  account  Account  @relation(fields: [accountId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+}
+
+enum TransactionType {
+  DEBIT
+  CREDIT
+}
+
+enum CategoryType {
+  INCOME
+  EXPENSE
+}
+
+model RemoveTokens {
+  id      Int      @id @default(autoincrement())
+  token   String   @db.VarChar(300)
+  expired DateTime
+
+  @@map("removeTokens")
+}
