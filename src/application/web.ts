@@ -14,4 +14,4 @@ web.use(express.json());
 web.use(express.urlencoded({ extended: true }));
 web.use(rateLimiter);
 web.use("/api", publicRouter);
-web.use(errorMiddleware);
+web.use(errorMiddleware)
