@@ -1,4 +1,4 @@
-import { True } from "./../../generated/prisma/internal/prismaNamespace";
+import { True } from "../../generated/prisma/internal/prismaNamespace";
 import { request } from "node:http";
 import { prismaClient } from "../application/database";
 import { ResponseError } from "../error/response-error";

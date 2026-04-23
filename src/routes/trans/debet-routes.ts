@@ -1,5 +1,5 @@
 import express  from "express";
-import debetController from "../controller/debet-controller";
+import debetController from "../../controller/trans/debet-controller";
 
 const transRuter = express.Router();
 transRuter.get('/', debetController.get);

@@ -57,7 +57,7 @@ const logked = async (token: string) => {
   if (!token) {
     throw new ResponseError(404, "Token not found");
   } 
-
+  console.log(token);
   const user = await prismaClient.user.findFirst({
     where: {
       AND: [{ token: token }, { token: { not: null } }],
