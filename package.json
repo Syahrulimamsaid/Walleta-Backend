@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest -i",
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch src/index.ts --host",
     "swagger": "bun src/docs/docs-generate.ts"
   },
   "jest": {

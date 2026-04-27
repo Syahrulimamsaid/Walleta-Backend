@@ -12,9 +12,7 @@ const login = async (req: any, res: any, next: any) => {
 };
 const logout = async (req: any, res: any, next: any) => {
   try {
-    const result = await authService.logout(
-      req.headers.authorization?.split(" ")[1],
-    );
+    const result = await authService.logout(req);
     return res.status(200).json({
       data: result,
     });
@@ -25,9 +23,7 @@ const logout = async (req: any, res: any, next: any) => {
 
 const logked = async (req: any, res: any, next: any) => {
   try {
-    const result = await authService.logked(
-      req.headers.authorization?.split(" ")[1],
-    );
+    const result = await authService.logked(req);
     return res.status(200).json({
       data: result,
     });

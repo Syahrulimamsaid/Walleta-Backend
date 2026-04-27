@@ -22,6 +22,7 @@ model User {
   accounts     Account[]
   categories   Category[]
   transactions Transaction[]
+  tokens       Token[]
 
   @@map("users")
 }
@@ -81,10 +82,14 @@ enum CategoryType {
   INCOME
   EXPENSE
 }
+
 model Token {
   id      Int      @id @default(autoincrement())
+  userId  String   @db.Uuid
   token   String   @db.VarChar(300)
   expired DateTime
+
+  user User @relation(fields: [userId], references: [id])
 
   @@map("tokens")
 }

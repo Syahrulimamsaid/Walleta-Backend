@@ -5,11 +5,16 @@ const authMiddleware = async (req: any, res: any, next: any) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) return res.status(401).json({ message: "Unauthorized" });
 
-  const blackList = await prismaClient.removeTokens.findFirst({
+  const data = await prismaClient.token.findFirst({
+    select: { expired: true },
     where: { token: token },
   });
-  if (blackList) return res.status(401).json({ message: "Unauthorized" });
-  
+
+  if (!data) return res.status(401).json({ message: "Unauthorized" });
+
+  if (data?.expired < new Date())
+    return res.status(401).json({ message: "Unauthorized" });
+
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
     req.user = decoded;

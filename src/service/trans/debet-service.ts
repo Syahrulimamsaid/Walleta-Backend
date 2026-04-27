@@ -1,8 +1,8 @@
-import { True } from "../../generated/prisma/internal/prismaNamespace";
+import { True } from "../../../generated/prisma/internal/prismaNamespace";
 import { request } from "node:http";
-import { prismaClient } from "../application/database";
-import { ResponseError } from "../error/response-error";
-import { createDebetValidation } from "../validation/debet-validation";
+import { prismaClient } from "../../application/database";
+import { ResponseError } from "../../error/response-error";
+import { createDebetValidation } from "../../validation/debet-validation";
 
 const get = async (request: any) => {
   const data = await prismaClient.transaction.findMany({

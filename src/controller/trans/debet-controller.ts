@@ -1,4 +1,4 @@
-import debetService from "../../service/debet-service";
+import debetService from "../../service/trans/debet-service";
 
 const get = async (req: any, res: any, next: any) => {
   try {

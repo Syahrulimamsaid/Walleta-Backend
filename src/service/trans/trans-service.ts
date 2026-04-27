@@ -9,7 +9,7 @@ const get = async (request: any) => {
     select: {
       id: true,
       amount: true,
-      description:true,
+      description: true,
       date: true,
       category: { select: { id: true, name: true, type: true } },
       account: { select: { id: true, name: true } },
@@ -17,10 +17,42 @@ const get = async (request: any) => {
     orderBy: { date: "desc" },
   });
 
-  if (!data) {
+  const result = Object.values(
+    data.reduce(
+      (acc, trx) => {
+        const dateKey = trx.date.toISOString().split("T")[0];
+
+        if (!acc[dateKey]) {
+          acc[dateKey] = {
+            date: dateKey,
+            income: 0,
+            expense: 0,
+            detail: [],
+          };
+        }
+
+        acc[dateKey].income += Number(trx.category.type == 'INCOME' ? trx.amount : 0);
+        acc[dateKey].expense += Number(trx.category.type == 'EXPENSE' ? trx.amount : 0);
+
+        acc[dateKey].detail.push({
+          id: trx.id,
+          amount: trx.amount,
+          description: trx.description,
+          date: trx.date,
+          category: trx.category,
+          account: trx.account,
+        });
+
+        return acc;
+      },
+      {} as Record<string, any>,
+    ),
+  );
+
+  if (!result) {
     throw new ResponseError(404, "Data not found");
   }
-  return data;
+  return result;
 };
 
 export default { get };
