@@ -61,6 +61,27 @@ const get = async (request: any) => {
   return result;
 };
 
+const getById = async (request: any) => {
+  if (!request.params.id) {
+    throw new ResponseError(422, "Id required");
+  }
+
+  const data = await prismaClient.transaction.findFirst({
+    where: { id: request.params.id },
+    select: {
+      id: true,
+      amount: true,
+      description: true,
+      date: true,
+      type: true,
+      category: { select: { id: true, name: true, type: true } },
+      account: { select: { id: true, name: true } },
+    },
+  });
+
+  return data;
+};
+
 const create = async (request: any) => {
   const trans = await createTransValidation.validateAsync(request.body);
 
@@ -80,7 +101,7 @@ const create = async (request: any) => {
       userId: request.user.id,
     },
     select: {
-      id:true,
+      id: true,
       date: true,
       amount: true,
       description: true,
@@ -93,4 +114,4 @@ const create = async (request: any) => {
   return create;
 };
 
-export default { get, create };
+export default { get, getById, create };

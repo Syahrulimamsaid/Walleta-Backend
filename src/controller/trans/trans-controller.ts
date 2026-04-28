@@ -9,6 +9,15 @@ const get = async (req: any, res: any, next: any) => {
   }
 };
 
+const getById = async (req: any, res: any, next: any) => {
+  try {
+    const result = await transService.getById(req);
+    return res.status(200).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const create = async (req: any, res: any, next: any) => {
   try {
     const result = await transService.create(req);
@@ -18,5 +27,4 @@ const create = async (req: any, res: any, next: any) => {
   }
 };
 
-
-export default {get, create}
+export default { get, getById, create };
